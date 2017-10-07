@@ -7,7 +7,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: true });
 let app = express();
 let PORT = process.env.PORT || 3000;
 
-const theBuzzWords = [];
+let theBuzzWords = [];
 let score = 0;
 
 app.use(express.static('public'));
@@ -23,7 +23,7 @@ app.get('/buzzwords', (req, res) => {
 app.route('/buzzword')
 .post(urlencodedParser, (req, res) => {
   if(!req.body){
-    return res.sendStatus(400);
+    return res.json({"success:": false});
   }else if(theBuzzWords.length === 0){
     theBuzzWords.push(req.body);
     res.json({"success": true});
@@ -32,16 +32,16 @@ app.route('/buzzword')
       return element.buzzWord === req.body.buzzWord;
     });
     if(wordIsThere === true){
-      return res.sendStatus(400);
+      return res.json({"success": false});
     }else{
       theBuzzWords.push(req.body);
-      res.json({"succes": true});
+      res.json({"success": true});
     }
   }
 })
 .put(urlencodedParser, (req, res) => {
   if(!req.body){
-    return res.sendStatus(400);
+    return res.json({"success": false});
   }else{
     for(let i = 0; i < theBuzzWords.length; i++){
       if(req.body.buzzWord === theBuzzWords[i].buzzWord && req.body.heard === 'true'){
@@ -49,18 +49,18 @@ app.route('/buzzword')
         score += Number(theBuzzWords[i].points);
         return res.json( {"success": true, "newScore": score} );
       }else if(i === theBuzzWords.length-1){
-        return res.sendStatus(400);
+        return res.json({"success": false});
       }
     }
   }
 })
 .delete(urlencodedParser, (req, res) => {
   if(!req.body){
-    res.sendStatus(400);
+    res.json({"success": false});
   }else{
     for(let i = 0; i < theBuzzWords.length; i++){
       if(req.body.buzzWord !== theBuzzWords[i].buzzWord){
-        res.sendStatus(404);
+        res.json({"success": false});
       }else if(req.body.buzzWord === theBuzzWords[i].buzzWord){
         theBuzzWords.splice(i, 1);
         res.json( {"success": true} );
@@ -68,6 +68,20 @@ app.route('/buzzword')
     }
   }
 })
+
+app.post('/reset', urlencodedParser, (req, res) => {
+  if(!req.body){
+    res.json({"success": false});
+  }else{
+    if(req.body.reset === 'true'){
+      score = 0;
+      theBuzzWords = [];
+      res.json({"success": true});
+    }else{
+      res.json({"success": false});
+    }
+  }
+});
 
 app.listen(PORT, (err) => {
   console.log(`Server running on port: ${PORT}`);

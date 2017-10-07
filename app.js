@@ -22,7 +22,7 @@ app.get('/buzzwords', (req, res) => {
 
 app.route('/buzzword')
 .post(bodyParser.urlencoded({extended: true, parameterLimit: 3}), (req, res) => {
-  if(theBuzzWords.length === 5 || !(req.body.buzzWord) || !(req.body.points) || !(req.body.heard) || !(Number(req.body.points))){
+  if(theBuzzWords.length === 5 || !(req.body.buzzWord)|| !(req.body.heard === 'false') || !(Number(req.body.points))){
     return res.json({"success:": false});
   }else if(theBuzzWords.length === 0){
     theBuzzWords.push(req.body);

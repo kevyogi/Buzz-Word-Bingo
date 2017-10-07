@@ -25,6 +25,8 @@ app.route('/buzzword')
   if(theBuzzWords.length === 5 || !(req.body.buzzWord)|| !(req.body.heard === 'false') || !(Number(req.body.points))){
     return res.json({"success:": false});
   }else if(theBuzzWords.length === 0){
+    req.body.points = Number(req.body.points);
+    req.body.heard = false;
     theBuzzWords.push(req.body);
     res.json({"success": true});
   }else{
@@ -34,6 +36,8 @@ app.route('/buzzword')
     if(wordIsThere === true){
       return res.json({"success": false});
     }else{
+      req.body.points = Number(req.body.points);
+      req.body.heard = false;
       theBuzzWords.push(req.body);
       res.json({"success": true});
     }
@@ -45,8 +49,8 @@ app.route('/buzzword')
   }else{
     for(let i = 0; i < theBuzzWords.length; i++){
       if(req.body.buzzWord === theBuzzWords[i].buzzWord && req.body.heard === 'true'){
-        theBuzzWords[i].heard = 'true';
-        score += Number(theBuzzWords[i].points);
+        theBuzzWords[i].heard = true;
+        score += theBuzzWords[i].points;
         return res.json( {"success": true, "newScore": score} );
       }else if(i === theBuzzWords.length-1){
         return res.json({"success": false});

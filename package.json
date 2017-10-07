@@ -1,0 +1,23 @@
+{
+  "name": "buzz-word-bingo",
+  "version": "0.0.0",
+  "description": "a game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevyogi/Buzz-Word-Bingo.git"
+  },
+  "author": "Kevin Yogi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevyogi/Buzz-Word-Bingo/issues"
+  },
+  "homepage": "https://github.com/kevyogi/Buzz-Word-Bingo#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.1"
+  }
+}

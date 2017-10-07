@@ -30,7 +30,7 @@ app.route('/buzzword')
   }else{
     let wordIsThere = theBuzzWords.some((element) => {
       return element.buzzWord === req.body.buzzWord;
-    })
+    });
     if(wordIsThere === true){
       return res.sendStatus(400);
     }else{
@@ -47,9 +47,9 @@ app.route('/buzzword')
       if(req.body.buzzWord === theBuzzWords[i].buzzWord && req.body.heard === 'true'){
         theBuzzWords[i].heard = 'true';
         score += Number(theBuzzWords[i].points);
-        res.json( {"success": true, "newScore": score} );
-      }else{
-        res.sendStatus(400);
+        return res.json( {"success": true, "newScore": score} );
+      }else if(i === theBuzzWords.length-1){
+        return res.sendStatus(400);
       }
     }
   }

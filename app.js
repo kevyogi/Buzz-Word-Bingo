@@ -22,25 +22,16 @@ app.get('/buzzwords', (req, res) => {
 
 app.route('/buzzword')
 .post(bodyParser.urlencoded({extended: true, parameterLimit: 3}), (req, res) => {
-  if(theBuzzWords.length === 5 || !(req.body.buzzWord)|| !(req.body.heard === 'false') || !(Number(req.body.points))){
+  let wordIsThere = theBuzzWords.some((element) => {
+    return element.buzzWord === req.body.buzzWord;
+  });
+  if(theBuzzWords.length === 5 || !(req.body.buzzWord)|| !(req.body.heard === 'false') || !(Number(req.body.points)) || wordIsThere === true){
     return res.json({"success:": false});
-  }else if(theBuzzWords.length === 0){
+  }else if(wordIsThere === false || theBuzzWords.length === 0){
     req.body.points = Number(req.body.points);
     req.body.heard = false;
     theBuzzWords.push(req.body);
     res.json({"success": true});
-  }else{
-    let wordIsThere = theBuzzWords.some((element) => {
-      return element.buzzWord === req.body.buzzWord;
-    });
-    if(wordIsThere === true){
-      return res.json({"success": false});
-    }else{
-      req.body.points = Number(req.body.points);
-      req.body.heard = false;
-      theBuzzWords.push(req.body);
-      res.json({"success": true});
-    }
   }
 })
 .put(urlencodedParser, (req, res) => {

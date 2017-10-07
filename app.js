@@ -21,8 +21,8 @@ app.get('/buzzwords', (req, res) => {
 });
 
 app.route('/buzzword')
-.post(urlencodedParser, (req, res) => {
-  if(!req.body){
+.post(bodyParser.urlencoded({extended: true, parameterLimit: 3}), (req, res) => {
+  if(theBuzzWords.length === 5 || !(req.body.buzzWord) || !(req.body.points) || !(req.body.heard)){
     return res.json({"success:": false});
   }else if(theBuzzWords.length === 0){
     theBuzzWords.push(req.body);
@@ -40,7 +40,7 @@ app.route('/buzzword')
   }
 })
 .put(urlencodedParser, (req, res) => {
-  if(!req.body){
+  if(!req.body || theBuzzWords.length === 0){
     return res.json({"success": false});
   }else{
     for(let i = 0; i < theBuzzWords.length; i++){
@@ -55,7 +55,7 @@ app.route('/buzzword')
   }
 })
 .delete(urlencodedParser, (req, res) => {
-  if(!req.body){
+  if(!req.body || theBuzzWords.length === 0){
     res.json({"success": false});
   }else{
     for(let i = 0; i < theBuzzWords.length; i++){
